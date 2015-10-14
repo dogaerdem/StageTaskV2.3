@@ -22,17 +22,24 @@ public class IkinciActivity extends Activity {
         String yenikey4 = "";
         String yenikey5 = "";
         String yenikey6 = "";
+        int day;
+        int month;
+        int year;
+
 
         if (extras != null) {
-            yenikey1 = extras.get("key1").toString();
-            yenikey2 = extras.get("key2").toString();
-            yenikey3 = extras.get("key3").toString();
-            yenikey4 = extras.get("key4").toString();
-            yenikey5 = extras.get("key5").toString();
-            yenikey6 = extras.get("key6").toString();
+            yenikey1 = extras.getString("key1");
+            yenikey2 = extras.getString("key2");
+            yenikey4 = extras.getString("key4");
+            yenikey5 = extras.getString("key5");
+            yenikey6 = extras.getString("key6");
+            day = extras.getInt("day");
+            month = extras.getInt("month");
+            year = extras.getInt("year");
 
 
-            Toast.makeText(IkinciActivity.this, "Bilgiler: " + yenikey1 + yenikey2 + yenikey3 + yenikey4 + yenikey5 + yenikey6, Toast.LENGTH_LONG).show();
+
+            Toast.makeText(IkinciActivity.this, "İsim: " + yenikey1 + "Soyisim:  " + yenikey2 +  " Eposta: " + yenikey4 + " Cinsiyet: " + yenikey5 + " İl : " + yenikey6 + "Doğum Tarihi " + day + "." + month + "." + year  , Toast.LENGTH_LONG).show();
         }
     }
 }

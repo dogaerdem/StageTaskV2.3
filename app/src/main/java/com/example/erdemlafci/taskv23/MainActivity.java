@@ -8,40 +8,72 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
 
 public class MainActivity extends Activity  {
-    private EditText Date;
-
-    private DatePickerDialog DatePickerDialog;
-
-    private SimpleDateFormat dateFormatter;
+    private Button button;
+    private EditText edt1;
+    private EditText edt2;
+    private EditText edt3;
+    private EditText edt4;
+    private RadioGroup rg1;
+    private Spinner mySpinner;
+    private Calendar myCalendar;
+    private int day,month,year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        button = (Button) findViewById(R.id.button);
+        edt1 = (EditText) findViewById(R.id.editText);
+        edt2 = (EditText) findViewById(R.id.editText2);
+        edt3 = (EditText) findViewById(R.id.editText3);
+        edt4 = (EditText) findViewById(R.id.editText4);
+        rg1 = (RadioGroup)findViewById(R.id.radioGroup);
+        mySpinner =(Spinner) findViewById(R.id.spinner);
+        myCalendar = Calendar.getInstance();
 
-        findViewsById();
+        final DatePickerDialog.OnDateSetListener datePickerDialog = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                MainActivity.this.day = dayOfMonth;
+                MainActivity.this.month = monthOfYear+1;
+                MainActivity.this.year = year;
+                updateLabel();
+            }
 
-        setDateTimeField();
+        };
 
-    }
-        private void findViewsById() {
-        Date = (EditText) findViewById(R.id.editText3);
-        Date.setInputType(InputType.TYPE_NULL);
-        Date.requestFocus();
+        edt3.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction()==MotionEvent.ACTION_DOWN){
+                    new DatePickerDialog(MainActivity.this, datePickerDialog, myCalendar
+                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                }
+                return true;
+            }
+        });
+
+
+
 
 
         Spinner spinner = (Spinner)findViewById(R.id.spinner);
@@ -55,13 +87,7 @@ public class MainActivity extends Activity  {
         spinnerAdapter.notifyDataSetChanged();
 
 
-        final Button button = (Button) findViewById(R.id.button);
-        final EditText edt1 = (EditText) findViewById(R.id.editText);
-        final EditText edt2 = (EditText) findViewById(R.id.editText2);
-        final EditText edt3 = (EditText) findViewById(R.id.editText3);
-        final EditText edt4 = (EditText) findViewById(R.id.editText4);
-        final RadioGroup rg1 = (RadioGroup)findViewById(R.id.radioGroup);
-        final Spinner mySpinner =(Spinner) findViewById(R.id.spinner);
+
 
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -76,12 +102,22 @@ public class MainActivity extends Activity  {
                     i.putExtra("key4",edt4.getText().toString());
                     i.putExtra("key5", radiovalue.toString());
                     i.putExtra("key6",spinnerdeger.toString());
+                    i.putExtra("day",day);
+                    i.putExtra("month",month);
+                    i.putExtra("year", year);
 
 
-                    startActivity(i);
+                            startActivity(i);
                 }
 
-    }
-});
+            }
+        });
 
-    }};
+    }
+
+    private void updateLabel() {
+
+        edt3.setText(day+"."+month+"."+year);
+
+    }
+}
